@@ -48,16 +48,23 @@ const renderCards = (data) => {
 
 let barChart = null;
 
+const barMetrics = {
+  precipitation: { name: '降水量', unit: 'mm' },
+  aqi: { name: '空气质量指数', unit: '指数' }
+};
+let currentMetric = 'precipitation';
+
 const renderBarChart = (data) => {
   if (barChart === null) {
     barChart = echarts.init(document.querySelector('#bar-chart'));
   }
+  const m = barMetrics[currentMetric];
   barChart.setOption({
-    title: { text: '每日降水量（单位：mm）', left: 'center' },
+    title: { text: `每日${m.name}（单位：${m.unit}）`, left: 'center' },
     tooltip: { trigger: 'axis' },
     xAxis: { data: data.days },
-    yAxis: { name: 'mm' },
-    series: [{ name: '降水量', type: 'bar', data: data.precipitation }]
+    yAxis: { name: m.unit },
+    series: [{ name: m.name, type: 'bar', data: data[currentMetric] }]
   });
 };
 
@@ -86,6 +93,22 @@ const renderLineChart = (data) => {
     }
   });
 };
+
+// jQuery交互：柱状图指标切换（高亮当前按钮）
+$('[data-metric]').on('click', function () {
+  $('[data-metric]').removeClass('active');
+  $(this).addClass('active');
+  currentMetric = $(this).data('metric');
+  if (state.data) renderBarChart(state.data);
+});
+
+// jQuery交互：显示/隐藏最低温曲线
+$('#toggle-low').on('click', () => {
+  if (!lineChart) return;
+  const meta = lineChart.getDatasetMeta(1);
+  meta.hidden = !meta.hidden;
+  lineChart.update();
+});
 
 window.addEventListener('resize', () => {
   if (barChart) barChart.resize();

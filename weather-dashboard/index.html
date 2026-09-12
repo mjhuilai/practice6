@@ -23,10 +23,15 @@
   <section class="row g-3">
     <div class="col-lg-6">
       <h2 class="h5">每日降水与空气质量（ECharts柱状图）</h2>
+      <div class="btn-group btn-group-sm mb-2" role="group" aria-label="切换指标">
+        <button type="button" class="btn btn-outline-primary active" data-metric="precipitation">降水</button>
+        <button type="button" class="btn btn-outline-primary" data-metric="aqi">空气质量</button>
+      </div>
       <div id="bar-chart" class="chart-box"></div>
     </div>
     <div class="col-lg-6">
       <h2 class="h5">气温趋势（Chart.js折线图）</h2>
+      <button type="button" id="toggle-low" class="btn btn-outline-secondary btn-sm mb-2">显示/隐藏最低温曲线</button>
       <div class="chart-box"><canvas id="line-chart"></canvas></div>
     </div>
   </section>
