@@ -17,6 +17,8 @@ const loadData = async () => {
     $('#sub-title').text(data.title + ' · 数据来源：' + data.source);
     $('#status').hide();
     renderCards(data);
+    renderBarChart(data);
+    renderLineChart(data);
   } catch (error) {
     $('#status').text('加载失败：' + error.message).show();
   }
@@ -43,5 +45,51 @@ const renderCards = (data) => {
     `);
   });
 };
+
+let barChart = null;
+
+const renderBarChart = (data) => {
+  if (barChart === null) {
+    barChart = echarts.init(document.querySelector('#bar-chart'));
+  }
+  barChart.setOption({
+    title: { text: '每日降水量（单位：mm）', left: 'center' },
+    tooltip: { trigger: 'axis' },
+    xAxis: { data: data.days },
+    yAxis: { name: 'mm' },
+    series: [{ name: '降水量', type: 'bar', data: data.precipitation }]
+  });
+};
+
+let lineChart = null;
+
+const renderLineChart = (data) => {
+  if (lineChart !== null) {
+    lineChart.destroy();          // 防重复初始化
+  }
+  const ctx = document.querySelector('#line-chart');
+  lineChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: data.days,
+      datasets: [
+        { label: '最高温', data: data.highs, borderWidth: 2, tension: 0.3 },
+        { label: '最低温', data: data.lows, borderWidth: 2, tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        title: { display: true, text: '气温趋势（单位：℃）' }
+      }
+    }
+  });
+};
+
+window.addEventListener('resize', () => {
+  if (barChart) barChart.resize();
+  // Chart.js响应式默认自动处理，无需手动
+});
 
 loadData();
