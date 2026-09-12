@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>城市天气看板</title>
+  <link href="libs/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .chart-box { height: 360px; }
+    #status { display: none; }
+  </style>
+</head>
+<body class="container py-4">
+  <header>
+    <h1 class="h3">城市天气看板 · 昆明</h1>
+    <p class="text-muted" id="sub-title">数据来源：自建模拟数据（仅用于课程练习）</p>
+  </header>
+
+  <p id="status" class="alert alert-warning"></p>
+
+  <section class="row g-3 mb-4" id="cards"></section>
+
+  <section class="row g-3">
+    <div class="col-lg-6">
+      <h2 class="h5">每日降水与空气质量（ECharts柱状图）</h2>
+      <div id="bar-chart" class="chart-box"></div>
+    </div>
+    <div class="col-lg-6">
+      <h2 class="h5">气温趋势（Chart.js折线图）</h2>
+      <div class="chart-box"><canvas id="line-chart"></canvas></div>
+    </div>
+  </section>
+
+  <footer class="text-muted small mt-4">
+    数据说明：7 天 × 4 项指标（最高温、最低温、降水量、空气质量指数），共 28 个数据点，来源为自建模拟数据。
+  </footer>
+
+  <script src="libs/jquery-3.7.1.min.js"></script>
+  <script src="libs/bootstrap.bundle.min.js"></script>
+  <script src="libs/echarts.min.js"></script>
+  <script src="libs/chart.umd.js"></script>
+
+  <script src="app.js"></script>
+</body>
+</html>
